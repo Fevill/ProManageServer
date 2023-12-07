@@ -7,6 +7,8 @@ services:
       service: db
     env_file:
       - ./environment/.env.dev
+    networks:
+      - backend
 
   restore:
     extends:
@@ -16,40 +18,54 @@ services:
       - ./environment/.env.dev
     depends_on:
       - db
+    networks:
+      - backend
 
   finances:
     extends:
       file: services/api/finances-service.yml
       service: finances
+    env_file:
+      - ./environment/.env.dev
     depends_on:
       - db
+    networks:
+      - backend
 
-  task:
-    extends:
-      file: services/api/task-service.yml
-      service: task
-    depends_on:
-      - db
+  # task:
+  #   extends:
+  #     file: services/api/task-service.yml
+  #     service: task
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - backend
 
-  client:
-    extends:
-      file: services/client-service.yml
-      service: client
-    ports:
-      - "5000:80"
-    depends_on:
-      - db
+  # client:
+  #   extends:
+  #     file: services/client-service.yml
+  #     service: client
+  #   ports:
+  #     - "5000:80"
+  #   networks:
+  #     - frontend
+  #   depends_on:
+  #     - db
 
-  nginx:
-    extends:
-      file: services/nginx-service.yml
-      service: nginx
-    volumes:
-      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - client
-      - finances
-      - task
+  # nginx:
+  #   extends:
+  #     file: services/nginx-service.yml
+  #     service: nginx
+  #   volumes:
+  #     - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   depends_on:
+  #     - client
+  #     - finances
+  #     - task
+
+networks:
+  backend:
+  # frontend:
 
 volumes:
   db_data:

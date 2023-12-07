@@ -7,7 +7,22 @@ if ! command -v docker-compose &> /dev/null; then
 fi
 
 # Votre commande Docker Compose
-export $(cat ./environment/.env.dev | xargs) && docker-compose -f docker-compose.yml -f ./services/client-service.yml -f ./services/db-service.yml -f ./services/restore-service.yml -f ./services/nginx-service.yml -f ./services/api/finances-service.yml -f ./services/api/task-service.yml up db -d
+# Lire les variables d'environnement à partir du fichier .env.dev et les exporter
+export $(cat ./environment/.env.dev | xargs)
+
+# Spécifier les fichiers Docker Compose que vous souhaitez utiliser
+docker_compose_files=(
+  -f docker-compose.yml
+#   -f ./services/client-service.yml
+  -f ./services/db-service.yml
+  -f ./services/restore-service.yml
+#   -f ./services/nginx-service.yml
+  -f ./services/api/finances-service.yml
+#   -f ./services/api/task-service.yml
+)
+
+# Utiliser docker-compose avec les fichiers spécifiés
+docker-compose "${docker_compose_files[@]}" up
 
 # Autres commandes Docker Compose que vous souhaitez exécuter
 # docker-compose ...
