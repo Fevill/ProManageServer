@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Vérifie si Docker Compose est installé
+if ! command -v docker-compose &> /dev/null; then
+    echo "Docker Compose n'est pas installé sur ce système."
+    exit 1
+fi
+
+# Votre commande Docker Compose
+export $(cat ./environment/.env.dev | xargs) && docker-compose -f docker-compose.yml -f ./services/client-service.yml -f ./services/db-service.yml -f ./services/restore-service.yml up -d
+
+# Autres commandes Docker Compose que vous souhaitez exécuter
+# docker-compose ...
+
+# Fin du script

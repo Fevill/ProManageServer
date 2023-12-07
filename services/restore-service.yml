@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  restore:
+    image: postgres
+    depends_on:
+      - db
+    environment:
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./backup:/backup
+      - ./scripts/restore-script.sh:/restore-script.sh
+      - db_data:/var/lib/postgresql/data
+    command: /restore-script.sh
+    restart: "no"

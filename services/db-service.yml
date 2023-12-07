@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  db:
+    container_name: db_pro_manage
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "${EXTERNAL_PORT}:5432"
