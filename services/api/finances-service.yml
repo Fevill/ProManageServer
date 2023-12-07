@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  finances:
+    container_name: srv_finances
+    image: timgnh/finances:latest 
+    ports:
+      - "8080:8080"

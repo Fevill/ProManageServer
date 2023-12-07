@@ -7,7 +7,7 @@ if ! command -v docker-compose &> /dev/null; then
 fi
 
 # Votre commande Docker Compose
-export $(cat ./environment/.env.dev | xargs) && docker-compose -f docker-compose.yml -f ./services/client-service.yml -f ./services/db-service.yml -f ./services/restore-service.yml up -d
+export $(cat ./environment/.env.dev | xargs) && docker-compose -f docker-compose.yml -f ./services/client-service.yml -f ./services/db-service.yml -f ./services/restore-service.yml -f ./services/nginx-service.yml -f ./services/api/finances-service.yml -f ./services/api/task-service.yml up db -d
 
 # Autres commandes Docker Compose que vous souhaitez exécuter
 # docker-compose ...
