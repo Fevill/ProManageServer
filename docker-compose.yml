@@ -1,20 +1,21 @@
 version: '3.8'
 services:
-  web:
-    image: timgnh/pro_manage:latest
-    ports:
-      - "80:80"
-    environment:
-      - APP_ENV=production
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:80 || exit 1"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    logging:
-      driver: json-file
-      options:
-        max-size: "100m"
-        max-file: "5"
+  client:
+    extends:
+      file: services/client-service.yml
+      service: client
+  db:
+    extends:
+      file: services/db-service.yml
+      service: db
+    env_file:
+      - ./environment/.env.dev
+  restore:
+    extends:
+      file: services/restore-service.yml
+      service: restore
+    env_file:
+      - ./environment/.env.dev
+
+volumes:
+  db_data:
