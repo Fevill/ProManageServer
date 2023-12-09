@@ -13,7 +13,7 @@ export $(cat ./environment/.env.dev | xargs)
 # Spécifier les fichiers Docker Compose que vous souhaitez utiliser
 docker_compose_files=(
   -f docker-compose.yml
-#   -f ./services/client-service.yml
+  -f ./services/client-service.yml
   -f ./services/db-service.yml
   -f ./services/restore-service.yml
 #   -f ./services/nginx-service.yml
