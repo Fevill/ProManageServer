@@ -16,13 +16,13 @@ docker_compose_files=(
   -f ./services/client-service.yml
   -f ./services/db-service.yml
   -f ./services/restore-service.yml
-#   -f ./services/nginx-service.yml
+  -f ./services/nginx-service.yml
   -f ./services/api/finances-service.yml
 #   -f ./services/api/task-service.yml
 )
 
 # Utiliser docker-compose avec les fichiers spécifiés
-docker-compose "${docker_compose_files[@]}" up
+docker-compose "${docker_compose_files[@]}" up -d
 
 # Autres commandes Docker Compose que vous souhaitez exécuter
 # docker-compose ...

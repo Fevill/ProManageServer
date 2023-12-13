@@ -3,5 +3,3 @@ services:
   task:
     container_name: srv_task
     image: timgnh/task:latest 
-    ports:
-      - "8081:8080"
