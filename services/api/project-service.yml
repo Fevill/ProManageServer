@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  finances:
-    container_name: srv_finances
-    image: timgnh/finances:latest
+  project:
+    container_name: srv_project
+    image: timgnh/project:latest
     restart: always
     environment:
       SPRING_PROFILES_ACTIVE: prod

@@ -1,16 +1,24 @@
 #!/bin/bash
 
+# Arrête le script si une commande échoue
+set -e
+
 # Vérifie si Docker Compose est installé
 if ! command -v docker-compose &> /dev/null; then
     echo "Docker Compose n'est pas installé sur ce système."
     exit 1
 fi
 
-# Votre commande Docker Compose
+# Vérifie l'existence du fichier .env.dev
+if [ ! -f "./environment/.env.dev" ]; then
+    echo "Le fichier .env.dev est introuvable."
+    exit 1
+fi
+
 # Lire les variables d'environnement à partir du fichier .env.dev et les exporter
 export $(cat ./environment/.env.dev | xargs)
 
-# Spécifier les fichiers Docker Compose que vous souhaitez utiliser
+# Déclaration des fichiers Docker Compose
 docker_compose_files=(
   -f docker-compose.yml
   -f ./services/client-service.yml
@@ -18,13 +26,33 @@ docker_compose_files=(
   -f ./services/restore-service.yml
   -f ./services/nginx-service.yml
   -f ./services/api/finances-service.yml
-#   -f ./services/api/task-service.yml
+  -f ./services/api/project-service.yml
+  # -f ./services/api/task-service.yml
 )
 
-# Utiliser docker-compose avec les fichiers spécifiés
+# Arrête les services et supprime les conteneurs
+echo "Arrêt et suppression des conteneurs..."
+docker-compose "${docker_compose_files[@]}" down
+
+# Optionnel: Demander confirmation avant de supprimer les images
+read -p "Voulez-vous supprimer les images Docker ? (y/N) " choice
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+    echo "Suppression des images Docker..."
+    # Supprimer les images Docker si elles existent
+    images_to_remove=("timgnh/pro_manage" "timgnh/finances" "timgnh/project")
+    for image in "${images_to_remove[@]}"; do
+        if [[ $(docker images -q $image) ]]; then
+            echo "Suppression de l'image $image..."
+            docker rmi "$image"
+        else
+            echo "L'image $image n'existe pas, pas de suppression nécessaire."
+        fi
+    done
+fi
+
+# Lancement des services
+echo "Lancement des services..."
 docker-compose "${docker_compose_files[@]}" up -d
 
-# Autres commandes Docker Compose que vous souhaitez exécuter
-# docker-compose ...
-
 # Fin du script
+echo "Script terminé."

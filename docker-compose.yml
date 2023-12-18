@@ -32,6 +32,17 @@ services:
     networks:
       - backend
 
+  project:
+    extends:
+      file: services/api/project-service.yml
+      service: project
+    env_file:
+      - ./environment/.env.dev
+    depends_on:
+      - db
+    networks:
+      - backend
+
   client:
     extends:
       file: services/client-service.yml
